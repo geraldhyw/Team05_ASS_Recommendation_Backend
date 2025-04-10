@@ -1,6 +1,6 @@
 const express = require('express')
 const recsRoute = require('./routes/recommendations')
-const { createTable, insertData } = require('./initDynamoDb')
+const { createActionTable, createRelatedPdtTable, seedRelatedPdtData } = require('./initDynamoDb')
 
 const app = express()
 const port = process.env.PORT || 3000
@@ -9,12 +9,13 @@ app.use(express.json())
 
 const initDynamoDb = async () => {
     try {
-      const tableCreated = await createTable() 
-      if (tableCreated) {
-        await insertData()
-      }
+        await createActionTable()
+        const relatedPdtTable = await createRelatedPdtTable() 
+        if (relatedPdtTable) {
+            await seedRelatedPdtData()
+        }
     } catch (error) {
-      console.error('Error initializing DynamoDB:', error)
+        console.error('Error initializing DynamoDB:', error)
     }
   }
 
@@ -22,6 +23,6 @@ const initDynamoDb = async () => {
     app.use("/recommendations", recsRoute)
   
     app.listen(port, () => {
-      console.log(`Node.js HTTP server is running on port ${port}`)
+        console.log(`Node.js HTTP server is running on port ${port}`)
     })
 })

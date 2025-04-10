@@ -5,13 +5,13 @@ configureAWS()
 const dynamodb = new AWS.DynamoDB()
 const dynamoDocClient = new AWS.DynamoDB.DocumentClient()
 
-const createTableParams = {
-    TableName: 'related_posts',
+const createRelatedPdtTableParams = {
+    TableName: 'related_products',
     KeySchema: [
-      { AttributeName: 'postID', KeyType: 'HASH' },  // Partition key
+      { AttributeName: 'productID', KeyType: 'HASH' },  // Partition key
     ],
     AttributeDefinitions: [
-      { AttributeName: 'postID', AttributeType: 'N' }, // Number type for postID
+      { AttributeName: 'productID', AttributeType: 'N' },
     ],
     ProvisionedThroughput: {
       ReadCapacityUnits: 5,
@@ -19,48 +19,48 @@ const createTableParams = {
     },
 }
 
-const createTable = async () => {
+const createRelatedPdtTable = async () => {
     try {
-      const data = await dynamodb.createTable(createTableParams).promise()
-      console.log('Table created successfully:', data)
+      const data = await dynamodb.createTable(createRelatedPdtTableParams).promise()
+      console.log('Related pdt table created successfully:', data)
       return true
     } catch (err) {
-      console.error('Error creating table', err)
+      console.error('Error creating related pdt table', err)
       return false
     }
 }
   
-const insertData = async () => {
+const seedRelatedPdtData = async () => {
     const exitingItems = await dynamoDocClient.scan({
-        TableName: 'related_posts',
+        TableName: 'related_products',
     }).promise()
 
     if (exitingItems.Items.length > 0) return 
 
-    const relatedPostsData = [
-        { postID: 1, postIDs: [1, 2, 3] },
-        { postID: 2, postIDs: [1, 2, 3] },
-        { postID: 3, postIDs: [1, 2, 3] },
-        { postID: 4, postIDs: [1, 2, 3] },
-        { postID: 5, postIDs: [1, 2, 3] },
-        { postID: 6, postIDs: [1, 2, 3] },
-        { postID: 7, postIDs: [1, 2, 3] },
-        { postID: 8, postIDs: [1, 2, 3] },
-        { postID: 9, postIDs: [1, 2, 3] },
-        { postID: 10, postIDs: [1, 2, 3] },
-        { postID: 11, postIDs: [1, 2, 3] },
-        { postID: 12, postIDs: [1, 2, 3] },
-        { postID: 13, postIDs: [1, 2, 3] },
-        { postID: 14, postIDs: [1, 2, 3] },
-        { postID: 15, postIDs: [1, 2, 3] },
-        { postID: 16, postIDs: [1, 2, 3] },
-        { postID: 17, postIDs: [1, 2, 3] },
+    const relatedPdtData = [
+        { productID: 1, relatedProductIDs: [10, 11, 12] },
+        { productID: 2, relatedProductIDs: [1, 2, 3] },
+        { productID: 3, relatedProductIDs: [4, 5, 6] },
+        { productID: 4, relatedProductIDs: [4, 5, 6] },
+        { productID: 5, relatedProductIDs: [4, 5, 6] },
+        { productID: 6, relatedProductIDs: [4, 5, 6] },
+        { productID: 7, relatedProductIDs: [4, 5, 6] },
+        { productID: 8, relatedProductIDs: [4, 5, 6] },
+        { productID: 9, relatedProductIDs: [4, 5, 6] },
+        { productID: 10, relatedProductIDs: [4, 5, 6] },
+        { productID: 11, relatedProductIDs: [4, 5, 6] },
+        { productID: 12, relatedProductIDs: [4, 5, 6] },
+        { productID: 13, relatedProductIDs: [4, 5, 6] },
+        { productID: 14, relatedProductIDs: [4, 5, 6] },
+        { productID: 15, relatedProductIDs: [4, 5, 6] },
+        { productID: 16, relatedProductIDs: [4, 5, 6] },
+        { productID: 17, relatedProductIDs: [4, 5, 6] },
     ]
 
-    await Promise.all(relatedPostsData.map(async (related) => {
+    await Promise.all(relatedPdtData.map(async (related) => {
         try {
             await dynamoDocClient.put({
-                TableName: 'related_posts',
+                TableName: 'related_products',
                 Item: related,
             }).promise()
             console.log('Item inserted successfully:', related)
@@ -69,9 +69,37 @@ const insertData = async () => {
         }
     }))
 }
+
+const createActionTableParams = {
+    TableName: 'user_actions',
+    KeySchema: [
+        { AttributeName: 'userID', KeyType: 'HASH' },  // Partition key
+        { AttributeName: 'timestamp', KeyType: 'RANGE' }  // Sort key
+    ],
+    AttributeDefinitions: [
+        { AttributeName: 'userID', AttributeType: 'N' },  // String type for userID
+        { AttributeName: 'timestamp', AttributeType: 'N' },  // Number type for timestamp (Unix time)
+    ],
+    ProvisionedThroughput: {
+        ReadCapacityUnits: 5,  // Adjust based on your needs
+        WriteCapacityUnits: 5,  // Adjust based on your needs
+    },
+}
+
+const createActionTable = async () => {
+    try {
+      const data = await dynamodb.createTable(createActionTableParams).promise()
+      console.log('Action table created successfully:', data)
+      return true
+    } catch (err) {
+      console.error('Error creating action table', err)
+      return false
+    }
+}
  
 
 module.exports = { 
-    createTable, 
-    insertData
+    createRelatedPdtTable, 
+    createActionTable,
+    seedRelatedPdtData
 }
