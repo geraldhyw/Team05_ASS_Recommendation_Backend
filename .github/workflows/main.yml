@@ -71,6 +71,10 @@ jobs:
           done
           echo "DynamoDB is ready!"
 
+          export AWS_ACCESS_KEY_ID=test
+          export AWS_SECRET_ACCESS_KEY=test
+          export AWS_REGION=ap-southeast-1
+
           echo "Waiting for DynamoDB table to be ready..."
           until aws dynamodb describe-table --table-name related_products --endpoint-url=http://localhost:8000 --region ap-southeast-1 > /dev/null; do
             echo "Waiting for the table to be created..."
