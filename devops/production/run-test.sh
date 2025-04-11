@@ -9,4 +9,4 @@ export DB_PASSWORD=root123
 export DB_NAME=mysqldb
 export CI=true
 
-jest --runInBand
+jest --runInBand --detectOpenHandles

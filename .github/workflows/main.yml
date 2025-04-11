@@ -92,6 +92,10 @@ jobs:
 
           echo "✅ DynamoDB is ready for connections."
 
+      - name: Check DynamoDB Logs
+        run: |
+          docker logs dynamodb-test
+
       - name: Run tests
         run: DB_HOST=$CONTAINER_IP npm run test:pipe
 
