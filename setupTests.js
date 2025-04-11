@@ -33,7 +33,6 @@ const removeDynamoDbContainer = async () => {
 
 const initDynamoDb = async () => {
     try {
-        console.log('initDynamoDb')
         await createActionTable()
         const relatedPdtTable = await createRelatedPdtTable() 
         if (relatedPdtTable) {
