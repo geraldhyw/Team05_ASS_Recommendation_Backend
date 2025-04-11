@@ -45,17 +45,17 @@ const initDynamoDb = async () => {
 
 
 beforeAll(async () => {
-    // await sequelize.sync({ force: true }).then(async () => {
-    //     await seedData()
-    // }).catch((error) => {
-    //     console.error('Error initializing SQL:', error)
-    // })
-    
-    await initDynamoDb()
+    if (process.env.CI !== 'true') {
+        await sequelize.sync({ force: true }).then(async () => {
+            await seedData()
+        })
+        
+        await initDynamoDb()
+    }
 })
 
 afterAll(async () => {
-    // await sequelize.close()
+    await sequelize.close()
     
     await stopDynamoDbContainer()
     await removeDynamoDbContainer()
