@@ -11,13 +11,14 @@ const configureAWS = () => {
     region: process.env.AWS_REGION || 'ap-southeast-1',
     endpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
     ...(process.env.CI === 'true' && {
-      accessKeyId: 'test',
-      secretAccessKey: 'test'
+      credentials: {
+        accessKeyId: 'test',
+        secretAccessKey: 'test',
+      }
     })
   })
 
   AWS.config.logger = console
-
 }
 
 module.exports = {
