@@ -153,12 +153,12 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t receommendation-microservice .
+          docker build -t recommendation-microservice .
 
       - name: Tag Docker image
         run: |
-          docker tag receommendation-microservice:latest 409151997352.dkr.ecr.ap-southeast-1.amazonaws.com/ass-backend:receommendation-microservice-latest
+          docker tag recommendation-microservice:latest 409151997352.dkr.ecr.ap-southeast-1.amazonaws.com/ass-backend:recommendation-microservice-latest
 
       - name: Push Docker image to ECR
         run: |
-          docker push 409151997352.dkr.ecr.ap-southeast-1.amazonaws.com/ass-backend:receommendation-microservice-latest
+          docker push 409151997352.dkr.ecr.ap-southeast-1.amazonaws.com/ass-backend:recommendation-microservice-latest
