@@ -28,14 +28,11 @@ jobs:
 
       dynamodb-test:
         image: amazon/dynamodb-local:latest
-        container_name: dynamodb-test
         ports:
           - "8000:8000"
-        volumes:
-          - ./dynamodb-test-data:/home/dynamodblocal/data
         env:
-          - DATABASE_PATH: /home/dynamodblocal/data
-          - DYNAMODB_ENDPOINT: http://localhost:8000
+          - DATABASE_PATH=/home/dynamodblocal/data
+          - DYNAMODB_ENDPOINT=http://localhost:8000
 
     steps:
       - name: Checkout repository
