@@ -45,6 +45,8 @@ const initDynamoDb = async () => {
 
 
 beforeAll(async () => {
+    await sequelize.authenticate().catch((error) => console.error(error))
+
     await sequelize.sync({ force: true }).then(async () => {
         await seedData()
     })

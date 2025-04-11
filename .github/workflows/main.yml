@@ -133,7 +133,7 @@ jobs:
       - name: Run tests
         run: |
           echo "Logging for CONTAINER_IP: $CONTAINER_IP"
-          npm run test:pipe
+          DB_HOST=$CONTAINER_IP npm run test:pipe
 
       - name: Set up AWS CLI
         uses: aws-actions/configure-aws-credentials@v1

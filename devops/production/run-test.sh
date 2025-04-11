@@ -2,7 +2,7 @@
 set -e
 
 export NODE_ENV=test
-export DB_HOST=localhost
+# export DB_HOST=mysql-test
 export DB_PORT=3306
 export DB_USER=root
 export DB_PASSWORD=root123
