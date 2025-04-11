@@ -62,14 +62,35 @@ jobs:
           done
           echo "MySQL is ready!"
 
-      - name: Wait for DynamoDb to be ready
+      - name: Wait for DynamoDB to be ready for API calls
         run: |
-          echo "Waiting for DynamoDB to be ready..."
+          echo "Waiting for DynamoDB to start on port 8000..."
           until curl -s http://localhost:8000 > /dev/null; do
-            echo "Waiting for DynamoDB..."
-            sleep 5
+            echo "Still waiting for DynamoDB HTTP server..."
+            sleep 2
           done
-          echo "DynamoDB is ready!"
+          echo "DynamoDB HTTP server is responding."
+
+          # Setup dummy AWS credentials for local
+          export AWS_ACCESS_KEY_ID=test
+          export AWS_SECRET_ACCESS_KEY=test
+          export AWS_REGION=ap-southeast-1
+
+          echo "Waiting for DynamoDB to be ready for requests..."
+          ATTEMPTS=0
+          until aws dynamodb list-tables \
+            --endpoint-url http://localhost:8000 \
+            --region ap-southeast-1 > /dev/null 2>&1; do
+            ATTEMPTS=$((ATTEMPTS+1))
+            if [ $ATTEMPTS -gt 10 ]; then
+              echo "❌ Timed out waiting for DynamoDB readiness."
+              exit 1
+            fi
+            echo "DynamoDB not ready yet... retrying in 3s"
+            sleep 3
+          done
+
+          echo "✅ DynamoDB is ready for connections."
 
       - name: Run tests
         run: DB_HOST=$CONTAINER_IP npm run test:pipe
