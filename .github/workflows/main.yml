@@ -1,0 +1,93 @@
+name: Run test and deploy to docker image to ECS
+
+# Trigger the workflow when pushing to the 'main' branch
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql-test:
+        image: mysql:latest
+        env:
+          MYSQL_ROOT_PASSWORD: root123 # Set the root password
+          MYSQL_USER: user123 # Optional: Create a non-root user
+          MYSQL_PASSWORD: password123 # Password for the non-root user
+          MYSQL_DATABASE: mysqldb
+        ports:
+          - "3306:3306"
+        options:
+          --health-cmd="mysqladmin ping --host=mysql-test --user=root --password=root123"
+          --health-timeout=5s
+          --health-retries=10
+          --health-start-period=30s
+
+      dynamodb-test:
+        image: amazon/dynamodb-local:latest
+        container_name: dynamodb-test
+        ports:
+          - "8000:8000"
+        volumes:
+          - ./dynamodb-test-data:/home/dynamodblocal/data
+        environment:
+          - DATABASE_PATH=/home/dynamodblocal/data
+          - DYNAMODB_ENDPOINT=http://localhost:8000
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Get MySQL container IP address
+        run: |
+          CONTAINER_ID=$(docker ps -q --filter "ancestor=mysql:latest")
+          CONTAINER_IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $CONTAINER_ID)
+          echo "MySQL container IP is $CONTAINER_IP"
+          echo "CONTAINER_IP=$CONTAINER_IP" >> $GITHUB_ENV
+
+      - name: Wait for MySQL to be ready
+        run: |
+          CONTAINER_ID=$(docker ps -q --filter "ancestor=mysql:latest")
+          echo "Waiting for MySQL to be ready..."
+          until mysqladmin ping --host=$CONTAINER_IP --port=3306 --user=root --password=root123 --silent; do
+            echo "Waiting for MySQL..."
+            sleep 5
+          done
+          echo "MySQL is ready!"
+
+      - name: Run tests
+        run: DB_HOST=$CONTAINER_IP npm run test:pipe
+
+      - name: Set up AWS CLI
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-southeast-1
+
+      - name: Log in to Amazon ECR
+        run: |
+          aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 409151997352.dkr.ecr.ap-southeast-1.amazonaws.com
+
+      - name: Build Docker image
+        run: |
+          docker build -t receommendation-microservice .
+
+      - name: Tag Docker image
+        run: |
+          docker tag receommendation-microservice:latest 409151997352.dkr.ecr.ap-southeast-1.amazonaws.com/ass-backend:receommendation-microservice-latest
+
+      - name: Push Docker image to ECR
+        run: |
+          docker push 409151997352.dkr.ecr.ap-southeast-1.amazonaws.com/ass-backend:receommendation-microservice-latest
