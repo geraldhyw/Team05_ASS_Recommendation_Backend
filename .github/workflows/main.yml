@@ -33,9 +33,9 @@ jobs:
           - "8000:8000"
         volumes:
           - ./dynamodb-test-data:/home/dynamodblocal/data
-        environment:
-          - DATABASE_PATH=/home/dynamodblocal/data
-          - DYNAMODB_ENDPOINT=http://localhost:8000
+        env:
+          - DATABASE_PATH: /home/dynamodblocal/data
+          - DYNAMODB_ENDPOINT: http://localhost:8000
 
     steps:
       - name: Checkout repository
