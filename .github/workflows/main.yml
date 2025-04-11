@@ -71,6 +71,13 @@ jobs:
           done
           echo "DynamoDB is ready!"
 
+          echo "Waiting for DynamoDB table to be ready..."
+          until aws dynamodb describe-table --table-name related_products --endpoint-url=http://localhost:8000 > /dev/null; do
+            echo "Waiting for the table to be created..."
+            sleep 5
+          done
+          echo "Table is ready!"
+
       - name: Run tests
         run: DB_HOST=$CONTAINER_IP npm run test:pipe
 
