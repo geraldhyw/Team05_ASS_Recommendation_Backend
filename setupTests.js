@@ -47,6 +47,8 @@ const initDynamoDb = async () => {
 beforeAll(async () => {
     await sequelize.sync({ force: true }).then(async () => {
         await seedData()
+    }).catch((error) => {
+        console.error('Error initializing SQL:', error)
     })
     
     await initDynamoDb()
