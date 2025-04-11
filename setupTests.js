@@ -1,4 +1,4 @@
-const sequelize = require('./config')
+const { sequelize } = require('./config')
 const { seedData } = require('./seed')
 const { createActionTable, createRelatedPdtTable, seedRelatedPdtData } = require('./initDynamoDb')
 const { exec } = require('child_process')
@@ -45,8 +45,6 @@ const initDynamoDb = async () => {
 
 
 beforeAll(async () => {
-    await sequelize.authenticate().catch((error) => console.error(error))
-
     await sequelize.sync({ force: true }).then(async () => {
         await seedData()
     })
