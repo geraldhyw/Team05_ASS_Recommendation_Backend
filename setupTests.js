@@ -1,5 +1,5 @@
 const sequelize = require('./config')
-const { seedData } = require("./seed")
+const { seedData } = require('./seed')
 const { createActionTable, createRelatedPdtTable, seedRelatedPdtData } = require('./initDynamoDb')
 const { exec } = require('child_process')
 

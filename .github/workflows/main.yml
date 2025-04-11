@@ -92,9 +92,9 @@ jobs:
 
           echo "✅ DynamoDB is ready for connections."
 
-      - name: Check DynamoDB container logs
+      - name: Check sql container logs
         run: |
-          CONTAINER_ID=$(docker ps -q --filter "ancestor=amazon/dynamodb-local:latest")
+          CONTAINER_ID=$(docker ps -q --filter "ancestor=mysql:latest")
           echo "Logging for container ID: $CONTAINER_ID"
           docker logs $CONTAINER_ID
 
