@@ -62,6 +62,11 @@ jobs:
           done
           echo "MySQL is ready!"
 
+      - name: Seed MySQL database with schema.sql
+        run: |
+          echo "Seeding MySQL with schema.sql..."
+          mysql -h $CONTAINER_IP -P 3306 -u root -proot123 mysqldb < init.sql
+
       - name: Wait for DynamoDB to be ready for API calls
         run: |
           echo "Waiting for DynamoDB to start on port 8000..."
@@ -92,11 +97,11 @@ jobs:
 
           echo "✅ DynamoDB is ready for connections."
 
-      - name: Check sql container logs
-        run: |
-          CONTAINER_ID=$(docker ps -q --filter "ancestor=mysql:latest")
-          echo "Logging for container ID: $CONTAINER_ID"
-          docker logs $CONTAINER_ID
+      # - name: Check sql container logs
+      #   run: |
+      #     CONTAINER_ID=$(docker ps -q --filter "ancestor=mysql:latest")
+      #     echo "Logging for container ID: $CONTAINER_ID"
+      #     docker logs $CONTAINER_ID
 
       # - name: Seed DynamoDB tables using AWS CLI
       #   run: |
