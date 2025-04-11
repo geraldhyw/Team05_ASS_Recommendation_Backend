@@ -1,0 +1,22 @@
+{
+    "related_products": [
+      { "PutRequest": { "Item": { "productID": { "N": "1" }, "relatedProductIDs": { "NS": ["10", "11", "12"] } } } },
+      { "PutRequest": { "Item": { "productID": { "N": "2" }, "relatedProductIDs": { "NS": ["1", "2", "3"] } } } },
+      { "PutRequest": { "Item": { "productID": { "N": "3" }, "relatedProductIDs": { "NS": ["4", "5", "6"] } } } },
+      { "PutRequest": { "Item": { "productID": { "N": "4" }, "relatedProductIDs": { "NS": ["4", "5", "6"] } } } },
+      { "PutRequest": { "Item": { "productID": { "N": "5" }, "relatedProductIDs": { "NS": ["4", "5", "6"] } } } },
+      { "PutRequest": { "Item": { "productID": { "N": "6" }, "relatedProductIDs": { "NS": ["4", "5", "6"] } } } },
+      { "PutRequest": { "Item": { "productID": { "N": "7" }, "relatedProductIDs": { "NS": ["4", "5", "6"] } } } },
+      { "PutRequest": { "Item": { "productID": { "N": "8" }, "relatedProductIDs": { "NS": ["4", "5", "6"] } } } },
+      { "PutRequest": { "Item": { "productID": { "N": "9" }, "relatedProductIDs": { "NS": ["4", "5", "6"] } } } },
+      { "PutRequest": { "Item": { "productID": { "N": "10" }, "relatedProductIDs": { "NS": ["4", "5", "6"] } } } },
+      { "PutRequest": { "Item": { "productID": { "N": "11" }, "relatedProductIDs": { "NS": ["4", "5", "6"] } } } },
+      { "PutRequest": { "Item": { "productID": { "N": "12" }, "relatedProductIDs": { "NS": ["4", "5", "6"] } } } },
+      { "PutRequest": { "Item": { "productID": { "N": "13" }, "relatedProductIDs": { "NS": ["4", "5", "6"] } } } },
+      { "PutRequest": { "Item": { "productID": { "N": "14" }, "relatedProductIDs": { "NS": ["4", "5", "6"] } } } },
+      { "PutRequest": { "Item": { "productID": { "N": "15" }, "relatedProductIDs": { "NS": ["4", "5", "6"] } } } },
+      { "PutRequest": { "Item": { "productID": { "N": "16" }, "relatedProductIDs": { "NS": ["4", "5", "6"] } } } },
+      { "PutRequest": { "Item": { "productID": { "N": "17" }, "relatedProductIDs": { "NS": ["4", "5", "6"] } } } }
+    ]
+  }
+  
