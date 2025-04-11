@@ -19,10 +19,18 @@ const initDynamoDb = async () => {
     }
   }
 
-initDynamoDb().then(() => {
+if (process.env.NODE_ENV !== "production") {
+    initDynamoDb().then(() => {
+        app.use("/recommendations", recsRoute)
+      
+        app.listen(port, () => {
+            console.log(`Node.js HTTP server is running on port ${port}`)
+        })
+    })
+} else {
     app.use("/recommendations", recsRoute)
-  
+      
     app.listen(port, () => {
         console.log(`Node.js HTTP server is running on port ${port}`)
     })
-})
+}
