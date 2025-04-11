@@ -79,6 +79,7 @@ const getRecommendationsByUser = async (req, res) => {
         }
 
     } catch (error) {
+        console.error('getRecommendationsByUser:', error.message);
         res.status(500).json({ message: error.message })
     }
 }
