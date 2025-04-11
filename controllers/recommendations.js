@@ -40,7 +40,7 @@ const getRecommendationsByUser = async (req, res) => {
         actionCountArray.sort((a, b) => b.score - a.score)
 
         if (actionCountArray.length < 3) {
-            res.status(200).json(allProducts)
+            return res.status(200).json(allProducts)
         }
 
         // get top 3 related products
@@ -72,15 +72,16 @@ const getRecommendationsByUser = async (req, res) => {
                     [Sequelize.literal(`FIELD(id, ${recommendedPdtIDs.join(',')})`)]
                 ]
             })
-            res.status(200).json(recommendedPdts)
+            console.log(recommendedPdts)
+            return res.status(200).json(recommendedPdts)
         } else {
             console.log('No related products found or no data returned')
-            res.status(200).json(allProducts)
+            return res.status(200).json(allProducts)
         }
 
     } catch (error) {
         console.error('getRecommendationsByUser:', error.message);
-        res.status(500).json({ message: error.message })
+        return res.status(500).json({ message: error.message })
     }
 }
 
