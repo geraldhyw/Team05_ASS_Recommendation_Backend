@@ -19,7 +19,7 @@ const initDynamoDb = async () => {
     }
   }
 
-  initDynamoDb().then(() => {
+initDynamoDb().then(() => {
     app.use("/recommendations", recsRoute)
   
     app.listen(port, () => {
