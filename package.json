@@ -6,7 +6,8 @@
   "scripts": {
     "start": "bash ./devops/development/start.sh",
     "db:start": "docker-compose up -d",
-    "test": "bash ./devops/test/run-test.sh"
+    "test": "bash ./devops/test/run-test.sh",
+    "test:pipe": "bash ./devops/production/run-test.sh"
   },
   "author": "",
   "license": "ISC",
