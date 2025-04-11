@@ -1,6 +1,6 @@
 const Product = require("../models/products")
 const AWS = require('aws-sdk')
-const { sequelize, configureAWS } = require('../config')
+const { configureAWS } = require('../config')
 const { Sequelize } = require('sequelize')
 
 configureAWS()
@@ -9,7 +9,6 @@ const dynamoDocClient = new AWS.DynamoDB.DocumentClient()
 
 const getRecommendationsByUser = async (req, res) => {
     try {
-        await sequelize.authenticate()
         const { userID } = req.params
         const allProducts = await Product.findAll()
 
