@@ -131,7 +131,9 @@ jobs:
             --endpoint-url http://localhost:8000
 
       - name: Run tests
-        run: DB_HOST=$CONTAINER_IP npm run test:pipe
+        run: |
+          echo "Logging for CONTAINER_IP: $CONTAINER_IP"
+          DB_HOST=$CONTAINER_IP npm run test:pipe
 
       - name: Set up AWS CLI
         uses: aws-actions/configure-aws-credentials@v1
