@@ -47,8 +47,6 @@ const initDynamoDb = async () => {
 beforeAll(async () => {
     await sequelize.sync({ force: true }).then(async () => {
         await seedData()
-    }).catch(() => {
-        console.error(process.env.DB_HOST)
     })
     
     await initDynamoDb()
