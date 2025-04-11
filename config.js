@@ -7,16 +7,19 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
 })
 
 const configureAWS = () => {
-  AWS.config.update({
-    region: process.env.AWS_REGION || 'ap-southeast-1',
-    endpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
-    ...(process.env.CI === 'true' && {
-      credentials: {
-        accessKeyId: 'test',
-        secretAccessKey: 'test',
-      }
-    })
-  })
+  const config = {
+    region: process.env.AWS_REGION || 'ap-southeast-1', // default region
+    endpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000', // local DynamoDB endpoint
+  }
+
+  if (process.env.CI === 'true') {
+    config.credentials = {
+      accessKeyId: 'test',
+      secretAccessKey: 'test',
+    }
+  }
+
+  AWS.config.update(config)
 
   AWS.config.logger = console
 }
