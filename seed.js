@@ -1,9 +1,57 @@
 const Product = require('./models/products')
+const User = require('./models/users')
+const ProductBooking = require('./models/productBookings')
+
 
 async function seedData() {
     console.log('Starting data seeding..')
+    await seedUser()
     await seedProducts()
+    await seedProductBookings()
     console.log('Data seeded successfully!')
+}
+
+async function seedUser() {
+    try {
+        const count = await User.count()
+        if (count > 0) {
+            console.log('User table already has data. Skipping seed.')
+            return
+        }
+
+        await User.bulkCreate([
+            { username: 'alice', password: 'password123' },
+            { username: 'bob', password: 'password123' },
+            { username: 'charlie', password: 'password123' }
+        ], {
+            ignoreDuplicates: true
+        })
+        console.log('User data seeded successfully!')
+    } catch (error) {
+        console.error('Error seeding user data:', error)
+    }
+}
+
+async function seedProductBookings() {
+    try {
+        const count = await ProductBooking.count()
+        if (count > 0) {
+            console.log('Product booking table already has data. Skipping seed.')
+            return
+        }
+
+        await ProductBooking.bulkCreate([
+            { productID: 2, date: '2025-01-10T00:00:00.000Z' },
+            { productID: 2, date: '2025-01-11T00:00:00.000Z' },
+            { productID: 2, date: '2025-01-20T00:00:00.000Z' },
+            { productID: 2, date: '2025-01-25T00:00:00.000Z' },
+        ], {
+            ignoreDuplicates: true
+        })
+        console.log('Product booking data seeded successfully!')
+    } catch (error) {
+        console.error('Error seeding product booking data:', error)
+    }
 }
 
 async function seedProducts() {
