@@ -18,4 +18,4 @@ RUN chmod +x /app/devops/development/start.sh
 EXPOSE 3002
 
 # Command to start your application
-CMD ["npm", "start"]
+CMD ["node", "server.js"]
