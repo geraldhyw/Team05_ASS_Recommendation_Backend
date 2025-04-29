@@ -58,10 +58,13 @@ const getRecommendationsByUser = async (req, res) => {
 
         if (relatedProducts.Responses && relatedProducts.Responses.related_products) {
             const result = relatedProducts.Responses.related_products
+            console.log('result', result)
 
             const modifiedResult = result.flatMap(value => value.relatedProductIDs)
+            console.log('modifiedResult', modifiedResult)
 
             const recommendedPdtIDs = [...new Set([...modifiedResult, ...allProducts.map(p => p.id)])]
+            console.log('recommendedPdtIds', recommendedPdtIDs)
             const recommendedPdts = await Product.findAll({
                 where: {
                     id: {
