@@ -7,6 +7,9 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
 })
 
 const configureAWS = () => {
+  console.log(`process.env.CI: ${process.env.AWS_ACCESS_KEY_ID}`)
+  console.log(`process.env.AWS_ACCESS_KEY_ID: ${process.env.AWS_ACCESS_KEY_ID}`)
+  console.log(`process.env.AWS_SECRET_ACCESS_KEY: ${process.env.AWS_SECRET_ACCESS_KEY}`)
   AWS.config.update({
     region: process.env.AWS_REGION || 'ap-southeast-1',
     endpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
